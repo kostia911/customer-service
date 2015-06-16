@@ -7,7 +7,7 @@
         <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
         <meta name="viewport" content="width=device-width" />
         @Styles.Render("~/Content/css")
-        @Scripts.Render("~/bundles/modernizr")
+      
     </head>
     <body>
         <header>
@@ -60,12 +60,12 @@
           </ul>
         </li>
       </ul>
-    </div><!-- /.navbar-collapse -->
-  </div><!-- /.container-fluid -->
+    </div>
+  </div>
 </nav>
         </header>
         <div id="body">
-            @RenderSection("featured", required: false)
+           
             <section class="content-wrapper main-content clear-fix">
                 @RenderBody()
             </section>
@@ -77,6 +77,7 @@
         </footer>
 
         @Scripts.Render("~/bundles/jquery")
+          @Scripts.Render("~/bundles/angular")
         @RenderSection("scripts", required: false)
     </body>
 </html>

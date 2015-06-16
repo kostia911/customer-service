@@ -31,7 +31,7 @@ var OneStopTechVidsApp;
 
     var PeopleDataSvc = (function () {
         function PeopleDataSvc($http, $q) {
-            this.techVidsApiPath = "api/techVideos";
+            this.pplApiPath = "home/list";
             this.categoriesApiPath = "api/categories";
 
             this.httpService = $http;
@@ -53,7 +53,7 @@ var OneStopTechVidsApp;
             function getPeopleFromService() {
                 var deferred = self.qService.defer();
 
-                self.httpService.get(self.techVidsApiPath).then(function (result) {
+                self.httpService.get(self.pplApiPath).then(function (result) {
                     self.people = result.data;
                     deferred.resolve(self.people);
                 }, function (error) {
@@ -69,7 +69,7 @@ var OneStopTechVidsApp;
 
             var deferred = self.qService.defer();
 
-            self.httpService.get(self.techVidsApiPath + "?name=" + name).then(function (result) {
+            self.httpService.get(self.pplApiPath + "?name=" + name).then(function (result) {
                 deferred.resolve(result.data);
             }, function (error) {
                 deferred.reject(error);
@@ -185,7 +185,7 @@ var OneStopTechVidsApp;
             var self = this;
             var deferred = self.qService.defer();
 
-            self.httpService.put(self.techVidsApiPath + "/" + video.id, video).then(function (data) {
+            self.httpService.put(self.pplApiPath + "/" + video.id, video).then(function (data) {
                 for (var counter = 0; counter < self.people.length; counter++) {
                     if (self.people[counter].id === video.id) {
                         self.people[counter] = video;
@@ -204,7 +204,7 @@ var OneStopTechVidsApp;
             var self = this;
             var deferred = self.qService.defer();
 
-            self.httpService.post(self.techVidsApiPath, video).then(function (result) {
+            self.httpService.post(self.pplApiPath, video).then(function (result) {
                 video.id = result.data.id;
                 self.people.push(video);
                 deferred.resolve();
@@ -219,7 +219,7 @@ var OneStopTechVidsApp;
             var self = this;
             var deferred = self.qService.defer();
 
-            self.httpService.delete(self.techVidsApiPath + "/" + id).then(function (result) {
+            self.httpService.delete(self.pplApiPath + "/" + id).then(function (result) {
                 for (var counter = 0; counter < self.people.length; counter++) {
                     if (self.people[counter].id === id) {
                         self.people.splice(counter, 1);

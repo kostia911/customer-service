@@ -65,13 +65,13 @@ module OneStopTechVidsApp {
     export class PeopleDataSvc {
         private people: Array<Extensions.Person>;
         private positions: Array<Extensions.Position>;
-        private techVidsApiPath: string;
+        private pplApiPath: string;
         private categoriesApiPath: string;
         private httpService: ng.IHttpService;
         private qService: ng.IQService;
 
         constructor ($http: ng.IHttpService, $q: ng.IQService) {
-            this.techVidsApiPath = "api/techVideos";
+            this.pplApiPath = "home/list";
             this.categoriesApiPath = "api/categories";
 
             this.httpService = $http;
@@ -94,7 +94,7 @@ module OneStopTechVidsApp {
             function getPeopleFromService(): ng.IPromise<any> {
                 var deferred = self.qService.defer();
 
-                self.httpService.get(self.techVidsApiPath).then(function (result: any) {
+                self.httpService.get(self.pplApiPath).then(function (result: any) {
                     self.people = result.data;
                     deferred.resolve(self.people);
                 }, function (error) {
@@ -110,7 +110,7 @@ module OneStopTechVidsApp {
 
             var deferred = self.qService.defer();
 
-            self.httpService.get(self.techVidsApiPath + "?name=" + name)
+            self.httpService.get(self.pplApiPath + "?name=" + name)
                 .then(function (result) {
                     deferred.resolve(result.data);
                 }, function (error) {
@@ -228,7 +228,7 @@ module OneStopTechVidsApp {
             var self = this;
             var deferred = self.qService.defer();
 
-            self.httpService.put(self.techVidsApiPath + "/" + video.id, video)
+            self.httpService.put(self.pplApiPath + "/" + video.id, video)
                 .then(function (data) {
                     for (var counter = 0; counter < self.people.length; counter++) {
                         if (self.people[counter].id === video.id) {
@@ -248,7 +248,7 @@ module OneStopTechVidsApp {
             var self = this;
             var deferred = self.qService.defer();
 
-            self.httpService.post(self.techVidsApiPath, video)
+            self.httpService.post(self.pplApiPath, video)
                 .then(function (result) {
                     video.id = result.data.id;
                     self.people.push(video);
@@ -264,7 +264,7 @@ module OneStopTechVidsApp {
             var self = this;
             var deferred = self.qService.defer();
 
-            self.httpService.delete(self.techVidsApiPath + "/" + id).then(function (result) {
+            self.httpService.delete(self.pplApiPath + "/" + id).then(function (result) {
                 for (var counter = 0; counter < self.people.length; counter++) {
                     if (self.people[counter].id === id) {
                         self.people.splice(counter, 1);

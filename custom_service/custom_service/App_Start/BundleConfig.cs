@@ -5,7 +5,7 @@ namespace custom_service
 {
     public class BundleConfig
     {
-       
+
         public static void RegisterBundles(BundleCollection bundles)
         {
             bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
@@ -19,16 +19,16 @@ namespace custom_service
                        "~/Scripts/angular-route.js",
                        "~/Scripts/angular-resource.js",
                        "~/Scripts/angular-animate.js"
-
                        ));
+            
+            bundles.Add(new ScriptBundle("~/bundles/app").Include(
+                      "~/Scripts/Custom/app.js"
+                      ));
 
-           
             bundles.Add(new StyleBundle("~/Content/css").Include(
                 "~/Content/bootstrap.css",
                 "~/Content/bootstrap-theme.css",
                 "~/Content/site.css"));
-
-            
         }
     }
 }

@@ -35,7 +35,7 @@ var OneStopTechVidsApp;
 (function (OneStopTechVidsApp) {
     var Config = (function () {
         function Config($routeProvider) {
-            $routeProvider.when("/list", { templateUrl: "/Scripts/Custom/Templates/PeopleListTmpl.html", controller: "PeopleListCtrl" }).otherwise({ redirectTo: '/list' });
+            $routeProvider.when("/list", { templateUrl: "/Scripts/Custom/Templates/PeopleListTmpl.html", controller: "PeopleListCtrl" }).when("/edit/:id", { templateUrl: "/Scripts/Custom/Templates/EditPerson.html", controller: "EditPersonCtrl" }).otherwise({ redirectTo: '/list' });
         }
         return Config;
     })();
@@ -45,6 +45,9 @@ var OneStopTechVidsApp;
     var PeopleDataSvc = (function () {
         function PeopleDataSvc($http, $q) {
             this.pplApiPath = "home/list";
+
+            //TODO remove this one api path
+            this.pplPutPath = "home/putPerson";
             this.categoriesApiPath = "api/categories";
 
             this.httpService = $http;
@@ -151,20 +154,20 @@ var OneStopTechVidsApp;
         PeopleDataSvc.prototype.getAllPositions = function () {
             var self = this;
 
-            if (self.positions !== undefined) {
-                return self.qService.when(this.positions);
-            } else {
-                var deferred = self.qService.defer();
-
-                self.httpService.get(self.categoriesApiPath).then(function (result) {
-                    self.positions = result.data;
-                    deferred.resolve(self.positions);
-                }, function (error) {
-                    deferred.reject(error);
-                });
-
-                return deferred.promise;
-            }
+            //if (self.positions !== undefined) {
+            //    return self.qService.when(this.positions);
+            //} else {
+            //    var deferred = self.qService.defer();
+            //    self.httpService.get(self.categoriesApiPath).then(function (result: any) {
+            //        self.positions = result.data;
+            //        deferred.resolve(self.positions);
+            //    }, function (error) {
+            //            deferred.reject(error);
+            //        });
+            //    return deferred.promise;
+            //}
+            return null;
+            ;
         };
 
         PeopleDataSvc.prototype.getPosition = function (id) {
@@ -194,14 +197,14 @@ var OneStopTechVidsApp;
             }
         };
 
-        PeopleDataSvc.prototype.updatePerson = function (video) {
+        PeopleDataSvc.prototype.updatePerson = function (person) {
             var self = this;
             var deferred = self.qService.defer();
 
-            self.httpService.put(self.pplApiPath + "/" + video.Id, video).then(function (data) {
+            self.httpService.put(self.pplPutPath + "/" + person.Id, person).then(function (data) {
                 for (var counter = 0; counter < self.people.length; counter++) {
-                    if (self.people[counter].Id === video.Id) {
-                        self.people[counter] = video;
+                    if (self.people[counter].Id === person.Id) {
+                        self.people[counter] = person;
                         break;
                     }
                 }
@@ -282,8 +285,6 @@ var OneStopTechVidsApp;
         }
         PeopleListCtrl.prototype.init = function () {
             var self = this;
-            self.$scope.EditPerson = function (id) {
-            };
 
             if (self.$routeParams.id !== undefined) {
                 self.dataSvc.getPeopleByPosition(parseInt(this.$routeParams.id)).then(function (data) {
@@ -300,46 +301,51 @@ var OneStopTechVidsApp;
     OneStopTechVidsApp.PeopleListCtrl = PeopleListCtrl;
     PeopleListCtrl.$inject = ['$scope', '$routeParams', 'peopleDataSvc', 'ngTableParams'];
 
-    //export class EditTechVideoCtrl {
-    //    private $scope: Extensions.ITechVidEditScope;
-    //    private dataSvc: TechVidsDataSvc;
-    //    private $routeParams: Extensions.ITechVidsRouteParams;
-    //    private init(): void {
-    //        var self = this;
-    //        self.$scope.name = /^[a-zA-Z ]*$/;
-    //        self.dataSvc.getVideo(parseInt(this.$routeParams.id)).then(function (data) {
-    //            self.$scope.video = data;
-    //            self.dataSvc.getCategory(self.$scope.video.category)
-    //                .then(function (result) {
-    //                    self.$scope.category = result;
-    //                });
-    //        });
-    //        self.dataSvc.getAllCategories().then(function (data) {
-    //            self.$scope.categories = data;
-    //        });
-    //    }
-    //    constructor($scope: Extensions.ITechVidEditScope, $routeParams: Extensions.ITechVidsRouteParams, $window: ng.IWindowService, dataSvc: TechVidsDataSvc) {
-    //        var self = this;
-    //        self.$scope = $scope;
-    //        self.$routeParams = $routeParams;
-    //        self.dataSvc = dataSvc;
-    //        self.$scope.editVideo = function () {
-    //            self.$scope.video.category = self.$scope.category.id;
-    //            dataSvc.updateVideo(self.$scope.video).then(function (parameters) {
-    //                self.$scope.techVidForm.$setPristine();
-    //                $window.location.href = "#/list/" + self.$scope.video.category;
-    //            });
-    //        };
-    //        self.$scope.deleteVideo = function () {
-    //            dataSvc.deleteVideo(self.$scope.video.id).then(function () {
-    //                self.$scope.techVidForm.$setPristine();
-    //                $window.location.href = "#/list/" + self.$scope.video.category;
-    //            });
-    //        };
-    //        self.init();
-    //    }
-    //}
-    //EditTechVideoCtrl.$inject = ['$scope', '$routeParams', '$window', 'techVidsDataSvc'];
+    var EditPersonCtrl = (function () {
+        function EditPersonCtrl($scope, $routeParams, $window, dataSvc) {
+            var self = this;
+
+            self.$scope = $scope;
+            self.$routeParams = $routeParams;
+            self.dataSvc = dataSvc;
+
+            self.$scope.editPerson = function () {
+                //self.$scope.person.Position = self.$scope.position.id;
+                dataSvc.updatePerson(self.$scope.person).then(function (parameters) {
+                    //self.$scope.techVidForm.$setPristine();
+                    $window.location.href = "#/list/" + self.$scope.person.Position;
+                });
+            };
+
+            self.$scope.deletePerson = function () {
+                dataSvc.deletePerson(self.$scope.person.Id).then(function () {
+                    self.$scope.techVidForm.$setPristine();
+                    $window.location.href = "#/list/" + self.$scope.person.Position;
+                });
+            };
+
+            self.init();
+        }
+        EditPersonCtrl.prototype.init = function () {
+            var self = this;
+
+            self.$scope.name = /^[a-zA-Z ]*$/;
+            self.dataSvc.getPerson(parseInt(this.$routeParams.id)).then(function (data) {
+                self.$scope.person = data;
+                //self.dataSvc.getPosition(self.$scope.person.Position)
+                //    .then(function (result) {
+                //        self.$scope.position = result;
+                //    });
+            });
+            //self.dataSvc.getAllPositions().then(function (data) {
+            //    self.$scope.positions = data;
+            //});
+        };
+        return EditPersonCtrl;
+    })();
+    OneStopTechVidsApp.EditPersonCtrl = EditPersonCtrl;
+    EditPersonCtrl.$inject = ['$scope', '$routeParams', '$window', 'peopleDataSvc'];
+
     //export class AddVideoCtrl {
     //    $scope: Extensions.IAddTechVidScope;
     //    $window: ng.IWindowService;
@@ -379,5 +385,8 @@ var OneStopTechVidsApp;
     app.config(Config);
     app.factory('peopleDataSvc', ['$http', '$q', PeopleDataSvc.PeopleDataSvcFactory]);
     app.controller('PeopleListCtrl', PeopleListCtrl);
+
+    //app.controller('TechVidsCategoryCtrl', TechVidsCategoryCtrl);
+    app.controller('EditPersonCtrl', EditPersonCtrl);
 })(OneStopTechVidsApp || (OneStopTechVidsApp = {}));
 //# sourceMappingURL=app.js.map

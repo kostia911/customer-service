@@ -45,6 +45,30 @@ namespace custom_service.Controllers
         {
             return Json(_persons,JsonRequestBehavior.AllowGet);
         }
+
+        /// <summary>
+        /// TODO make it right
+        /// add validation on server side
+        /// add null checking
+        /// make return
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="person"></param>
+        /// <returns></returns>
+        [HttpPut]
+        public JsonResult putPerson(int id, Person person)
+        {
+            
+            //simple swap
+            var oldPerson = _persons.FirstOrDefault(p => p.Id == id);
+            if (oldPerson != null)
+                _persons.Remove(oldPerson);
+
+            _persons.Add(person);
+           
+            return null;
+        }
+
         #endregion
     }
 }

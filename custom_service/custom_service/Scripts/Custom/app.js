@@ -22,7 +22,7 @@ var OneStopTechVidsApp;
 (function (OneStopTechVidsApp) {
     var Config = (function () {
         function Config($routeProvider) {
-            $routeProvider.when("/list", { templateUrl: "Content/Templates/PeopleListTmpl.html", controller: "PeopleListCtrl" }).otherwise({ redirectTo: '/list' });
+            $routeProvider.when("/list", { templateUrl: "/Scripts/Custom/Templates/PeopleListTmpl.html", controller: "PeopleListCtrl" }).otherwise({ redirectTo: '/list' });
         }
         return Config;
     })();
@@ -283,7 +283,7 @@ var OneStopTechVidsApp;
         return PeopleListCtrl;
     })();
     OneStopTechVidsApp.PeopleListCtrl = PeopleListCtrl;
-    PeopleListCtrl.$inject = ['$scope', '$routeParams', 'PeopleDataSvc'];
+    PeopleListCtrl.$inject = ['$scope', '$routeParams', 'peopleDataSvc'];
 
     //export class EditTechVideoCtrl {
     //    private $scope: Extensions.ITechVidEditScope;

@@ -18,13 +18,11 @@ namespace custom_service
                        "~/Scripts/angular.js",
                        "~/Scripts/angular-route.js",
                        "~/Scripts/angular-resource.js",
-                       "~/Scripts/angular-animate.js"
+                       "~/Scripts/angular-animate.js",
+                       "~/Scripts/Custom/app.js"
                        ));
             
-            bundles.Add(new ScriptBundle("~/bundles/app").Include(
-                      "~/Scripts/Custom/app.js"
-                      ));
-
+            
             bundles.Add(new StyleBundle("~/Content/css").Include(
                 "~/Content/bootstrap.css",
                 "~/Content/bootstrap-theme.css",

@@ -19,8 +19,6 @@ module Extensions {
 
     export interface ITechPeopleScope extends ng.IScope {
         People: Array<Person>;
-        upRate(id: number, rating: number): void;
-        downRate(id: number, rating: number): void;
     }
 
     export interface ITechPersonEditScope extends ng.IScope {
@@ -55,7 +53,7 @@ module Extensions {
 module OneStopTechVidsApp {
     export class Config {
         constructor($routeProvider: ng.route.IRouteProvider) {
-            $routeProvider.when("/list", { templateUrl: "Content/Templates/PeopleListTmpl.html", controller: "PeopleListCtrl" })
+            $routeProvider.when("/list", { templateUrl: "/Scripts/Custom/Templates/PeopleListTmpl.html", controller: "PeopleListCtrl" })
                 //.when("/list/:id", { templateUrl: "App/Templates/VideoList.html", controller: "TechVidsListCtrl" })
                 //.when("/add", { templateUrl: "App/Templates/AddVideo.html", controller: "AddTechVideoCtrl" })
                 //.when("/edit/:id", { templateUrl: "App/Templates/EditVideo.html", controller: "EditTechVideoCtrl" })
@@ -343,7 +341,7 @@ module OneStopTechVidsApp {
             self.init();
         }
     }
-    PeopleListCtrl.$inject = ['$scope', '$routeParams', 'PeopleDataSvc'];
+    PeopleListCtrl.$inject = ['$scope', '$routeParams', 'peopleDataSvc'];
 
     //export class EditTechVideoCtrl {
     //    private $scope: Extensions.ITechVidEditScope;

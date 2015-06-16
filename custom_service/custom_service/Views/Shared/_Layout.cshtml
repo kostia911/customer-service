@@ -1,5 +1,5 @@
 ﻿<!DOCTYPE html>
-<html lang="ru" data-ng-app="app">
+<html lang="ru" data-ng-app="peopleApp">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta charset="utf-8" />
@@ -67,6 +67,20 @@
     <div id="body">
 
         <section class="content-wrapper main-content clear-fix">
+
+            <div class="container" style="margin-top:10px;">
+            <div class="col-md-3" ng-controller="PeopleListCtrl">
+                <ul class="list-unstyled" style="font-size:14px;">
+                    <li><a href="#/add" style="color:blue; font-weight:bold;">Add New Video</a></li>
+                    @*<li ng-repeat="category in categories"><a href="#/list/{{category.id}}">{{category.name}}</a></li>*@
+                </ul>
+            </div>
+            <div class="col-md-9" ng-view>
+
+            </div>
+        </div>
+
+
             @RenderBody()
         </section>
     </div>

@@ -19,6 +19,7 @@ namespace custom_service
                        "~/Scripts/angular-route.js",
                        "~/Scripts/angular-resource.js",
                        "~/Scripts/angular-animate.js",
+                       "~/Scripts/ng-table.js",
                        "~/Scripts/Custom/app.js"
                        ));
             

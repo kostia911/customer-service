@@ -16,6 +16,19 @@ var Extensions;
         return Position;
     })();
     Extensions.Position = Position;
+    var ngSettings = (function () {
+        function ngSettings() {
+        }
+        return ngSettings;
+    })();
+    Extensions.ngSettings = ngSettings;
+
+    var ngTableParameteres = (function () {
+        function ngTableParameteres() {
+        }
+        return ngTableParameteres;
+    })();
+    Extensions.ngTableParameteres = ngTableParameteres;
 })(Extensions || (Extensions = {}));
 
 var OneStopTechVidsApp;
@@ -98,7 +111,7 @@ var OneStopTechVidsApp;
 
             function filterPeople() {
                 for (var counter = 0; counter < self.people.length; counter++) {
-                    if (self.people[counter].category === id) {
+                    if (self.people[counter].Position === id) {
                         filteredPeople.push(self.people[counter]);
                     }
                 }
@@ -126,7 +139,7 @@ var OneStopTechVidsApp;
 
             function filterPerson() {
                 for (var counter = 0; counter < self.people.length; counter++) {
-                    if (id === self.people[counter].id) {
+                    if (id === self.people[counter].Id) {
                         return self.people[counter];
                     }
                 }
@@ -185,9 +198,9 @@ var OneStopTechVidsApp;
             var self = this;
             var deferred = self.qService.defer();
 
-            self.httpService.put(self.pplApiPath + "/" + video.id, video).then(function (data) {
+            self.httpService.put(self.pplApiPath + "/" + video.Id, video).then(function (data) {
                 for (var counter = 0; counter < self.people.length; counter++) {
-                    if (self.people[counter].id === video.id) {
+                    if (self.people[counter].Id === video.Id) {
                         self.people[counter] = video;
                         break;
                     }
@@ -200,13 +213,13 @@ var OneStopTechVidsApp;
             return deferred.promise;
         };
 
-        PeopleDataSvc.prototype.addPerson = function (video) {
+        PeopleDataSvc.prototype.addPerson = function (person) {
             var self = this;
             var deferred = self.qService.defer();
 
-            self.httpService.post(self.pplApiPath, video).then(function (result) {
-                video.id = result.data.id;
-                self.people.push(video);
+            self.httpService.post(self.pplApiPath, person).then(function (result) {
+                person.Id = result.data.Id;
+                self.people.push(person);
                 deferred.resolve();
             }, function (error) {
                 deferred.reject(error);
@@ -221,7 +234,7 @@ var OneStopTechVidsApp;
 
             self.httpService.delete(self.pplApiPath + "/" + id).then(function (result) {
                 for (var counter = 0; counter < self.people.length; counter++) {
-                    if (self.people[counter].id === id) {
+                    if (self.people[counter].Id === id) {
                         self.people.splice(counter, 1);
                         break;
                     }
@@ -269,6 +282,8 @@ var OneStopTechVidsApp;
         }
         PeopleListCtrl.prototype.init = function () {
             var self = this;
+            self.$scope.EditPerson = function (id) {
+            };
 
             if (self.$routeParams.id !== undefined) {
                 self.dataSvc.getPeopleByPosition(parseInt(this.$routeParams.id)).then(function (data) {
@@ -283,7 +298,7 @@ var OneStopTechVidsApp;
         return PeopleListCtrl;
     })();
     OneStopTechVidsApp.PeopleListCtrl = PeopleListCtrl;
-    PeopleListCtrl.$inject = ['$scope', '$routeParams', 'peopleDataSvc'];
+    PeopleListCtrl.$inject = ['$scope', '$routeParams', 'peopleDataSvc', 'ngTableParams'];
 
     //export class EditTechVideoCtrl {
     //    private $scope: Extensions.ITechVidEditScope;
@@ -360,7 +375,7 @@ var OneStopTechVidsApp;
     //    }
     //}
     //AddVideoCtrl.$inject = ['$scope', '$window', 'techVidsDataSvc'];
-    var app = angular.module("peopleApp", ['ngRoute', 'ngResource']);
+    var app = angular.module("peopleApp", ['ngRoute', 'ngResource', 'ngTable']);
     app.config(Config);
     app.factory('peopleDataSvc', ['$http', '$q', PeopleDataSvc.PeopleDataSvcFactory]);
     app.controller('PeopleListCtrl', PeopleListCtrl);
